@@ -7,6 +7,7 @@ if not credentials:
 ec2_client = boto3.client('ec2')
 response = ec2_client.describe_instances().get('Reservations')
 unencryptedInstances = []
+unencryptedInstancesSet = set()
 count = 0
 for Reservation in response:
     for instance in Reservation['Instances']:
@@ -23,8 +24,9 @@ for Reservation in response:
                         InstanceName = tags['Value']
                 if encryptionStatus == False:
                     unencryptedInstances.append([InstanceName, volID])
-                    print(count)
+                    unencryptedInstancesSet.add(InstanceName)
+                    #print(count)
                     count += 1
-for line in unencryptedInstances:
-    print(line)
-
+# for line in unencryptedInstances:
+#     print(line)
+print(unencryptedInstancesSet)
